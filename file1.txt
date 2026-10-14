@@ -1,0 +1,2 @@
+Hello, I am learning Linux.
+This is my first file.

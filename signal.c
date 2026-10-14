@@ -11,7 +11,7 @@ int main()
 {
     signal(SIGINT, handle_signal);
 
-    while(1)
+    while (1)
     {
         printf("Exam Server Running...\n");
         sleep(2);
@@ -19,4 +19,3 @@ int main()
 
     return 0;
 }
-

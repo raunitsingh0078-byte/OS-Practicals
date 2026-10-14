@@ -1,28 +1,42 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <sys/stat.h>
 #include <string.h>
+#include <errno.h>
 
 int main()
 {
-    int fd;
-    char *message = "Hello from Writer Process";
+    char *fifo = "mypipe";
+    char message[] = "Hello from Writer Process";
 
-    mkfifo("mypipe", 0666);
+    // Create named pipe
+    if (mkfifo(fifo, 0666) == -1 && errno != EEXIST)
+    {
+        perror("mkfifo");
+        return 1;
+    }
 
-    fd = open("mypipe", O_WRONLY);
+    printf("Writer: Starting...\n");
 
+    // Open FIFO for writing
+    int fd = open(fifo, O_WRONLY);
+
+    if (fd == -1)
+    {
+        perror("open");
+        return 1;
+    }
+
+    // Send message
     write(fd, message, strlen(message) + 1);
 
+    printf("Writer: Message sent: %s\n", message);
+
+    // Close FIFO
     close(fd);
 
     return 0;
 }
-
-
-
-
-
-
-
